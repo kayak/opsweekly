@@ -5,7 +5,17 @@ if (!file_exists('phplib/config.php')) {
     die('Cannot find config.php! It must be in phplib and named config.php');
 }
 
+require_once 'auth.php';
 require_once 'config.php';
+
+$authenticated = check_authentication($auth);
+if (!$authenticated) {
+  die("Failed to authenticate user.");
+} else {
+  //header("Refresh:0");
+}
+
+
 require_once 'oncall.php';
 require_once 'irccat.php';
 require_once 'pagination.class.php';
@@ -18,11 +28,11 @@ $nagios_state_to_badge = array("WARNING" => "warning", "CRITICAL" => "important"
 $nagios_state_to_bar = array("WARNING" => "warning", "CRITICAL" => "danger", "UNKNOWN" => "info", "OK" => "success");
 $tag_to_badge = array("action" => "success", "noaction" => "important", "" => "default");
 $nagios_alert_tags = array("" => "Untagged", "issue" => "Action Taken: Service Issue (View clean)", "issuetimeperiod" => "Action Taken: Service Issue, timeperiod inappropriate (View clean)",
-    "viewissue" => "Action Taken: View issue (network/site outage, service health questionable)", "incorrecttimeperiod" => "No Action Taken: Timeperiod not appropriate", 
-    "downtimeexpired" => "No Action Taken: Work ongoing, downtime expired", "downtimenotset" => "No Action Taken: Work ongoing, downtime not set", 
+    "viewissue" => "Action Taken: View issue (network/site outage, service health questionable)", "incorrecttimeperiod" => "No Action Taken: Timeperiod not appropriate",
+    "downtimeexpired" => "No Action Taken: Work ongoing, downtime expired", "downtimenotset" => "No Action Taken: Work ongoing, downtime not set",
     "thresholdincorrect" => "No Action Taken: Threshold adjustment required", "checkfaulty" => "No Action Taken: Check is faulty/requires modification", "na" => "N/A");
 $nagios_tag_categories = array("" => "Untagged", "action" => "Action Taken", "noaction" => "No Action Taken");
-$nagios_tag_category_map = array("issue" => "action", "issuetimeperiod" => "action", "viewissue" => "action", "incorrecttimeperiod" => "noaction", 
+$nagios_tag_category_map = array("issue" => "action", "issuetimeperiod" => "action", "viewissue" => "action", "incorrecttimeperiod" => "noaction",
     "downtimeexpired" => "noaction", "downtimenotset" => "noaction", "thresholdincorrect" => "noaction", "checkfaulty" => "noaction");
 $locales = array("UK" => "Europe/London", "ET" => "America/New_York", "PT" => "America/Los_Angeles");
 $sleep_states = array(-1 => "Unknown", 0 => "Awake", 1 => "Asleep");
@@ -47,7 +57,7 @@ if (!function_exists('getUsername')) {
 
 function getOrSetRequestedDate() {
     session_start();
-    if (isset($_POST['date'])) { 
+    if (isset($_POST['date'])) {
         $_SESSION['opsweekly_requested_date'] = $_POST['date'];
     }
     $date = (isset($_SESSION['opsweekly_requested_date'])) ? $_SESSION['opsweekly_requested_date'] : "now";
@@ -82,7 +92,7 @@ function getWeekRange($date) {
 
 function getOnCallWeekRange($date) {
     // This function returns a UTC period regardless of the timezone and is used to
-    // store a static range throughout the year for storing/retrieving data from the database. 
+    // store a static range throughout the year for storing/retrieving data from the database.
     $oncall_timezone = getTeamOncallConfig('timezone');
     $oncall_start_time = getTeamOncallConfig('start');
     $oncall_end_time = getTeamOncallConfig('end');
@@ -91,7 +101,7 @@ function getOnCallWeekRange($date) {
     $date = array_shift($date_bits);
     $ts = strtotime($date);
     // If we're still in the report week, we need to make sure we don't skip forward to the next oncall
-    // week otherwise the two become mismatched. 
+    // week otherwise the two become mismatched.
     $ts = ( date('l', $ts) == "Saturday" || date('l', $ts) == "Sunday" ) ? $ts = $ts - 172800: $ts;
     $start = strtotime("last {$oncall_start_time}", $ts);
     $return_start = date('U', $start);
@@ -102,7 +112,7 @@ function getOnCallWeekRange($date) {
 
 function getOnCallWeekRangeWithTZ($date) {
     // This function is like the one above, except takes the timezone into account for accurate
-    // retrieval of the alerts sent to the user from Splunk. Can't afford to be an hour out here. 
+    // retrieval of the alerts sent to the user from Splunk. Can't afford to be an hour out here.
     $oncall_timezone = getTeamOncallConfig('timezone');
     $oncall_start_time = getTeamOncallConfig('start');
     $oncall_end_time = getTeamOncallConfig('end');
@@ -405,7 +415,7 @@ function handleSearch($search_type, $search_term) {
 
 function formatSearchResults(array $results, $search_type, $highlight_term, $limit = 0, $start = 0) {
 
-    // If only a limited number of results is required, reduce the array down to that number. 
+    // If only a limited number of results is required, reduce the array down to that number.
     if ($limit != 0) $results = array_slice($results, $start, $limit);
 
     switch ($search_type) {
@@ -606,7 +616,7 @@ function getTeamConfig($option) {
 
 function getTeamOncallConfig($option, $plugin_options = false) {
     // Gets a value from the team's on call configuration. Set "plugin" to true to get
-    // an item from the plugin_options section instead. 
+    // an item from the plugin_options section instead.
     global $team_data;
     if ($team_data['oncall']) {
         if ($plugin_options) {
@@ -637,7 +647,7 @@ function sendEmailReport($from_username, $report, $range_start, $range_end) {
         return false;
     }
 
-    // Remove any bare linefeeds, Evernote loveeees to insert them. 
+    // Remove any bare linefeeds, Evernote loveeees to insert them.
     $report = str_replace('\r\n', '', $report);
 
     $subject = "Weekly Update";

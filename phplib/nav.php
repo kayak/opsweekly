@@ -15,7 +15,7 @@
                 trigger: "focus",
                 html: true,
                 title: "Search Tips",
-                content: "Default 'best effort' search, or: </br><small>" 
+                content: "Default 'best effort' search, or: </br><small>"
                     + "<li><b>service: query</b> - Search for alerts by service name</li>"
                     + "<li><b>host: query</b> - Search for alerts by host name</li>"
                     + "<li><b>report: query</b> - Search weekly reports</li>"
@@ -39,7 +39,7 @@
                         $('#setdate').submit();
                     });
                 </script>
-                </form> 
+                </form>
             </ul>
         </li>
       <?php } ?>
@@ -61,6 +61,7 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="dProfile">
                 <li><a tabindex="-1" href="<?php echo $ROOT_URL; ?>/profile.php">View Profile</a></li>
                 <li><a tabindex="-1" href="<?php echo $ROOT_URL; ?>/edit_profile.php">Edit Profile</a></li>
+                <li><a tabindex="-1" href="<?php echo $ROOT_URL; ?>/logout.php">Logout</a></li>
             </ul>
         </li>
 
