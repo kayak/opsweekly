@@ -13,11 +13,11 @@ $email_from_domain = "mycompany.com";
 /**
  * Authentication configuration
  * Nagdash must know who is requesting pages, as every update entry etc is unique
- * to a single person. 
+ * to a single person.
  * Therefore, you must define a function somewhere called getUsername()
  * that will return a plain text username string to Nagdash, e.g. "ldenness" or "bsmith"
- * 
- * Below are two examples to get you started. 
+ *
+ * Below are two examples to get you started.
 
 function getUsername() {
     // Make sure this is relevant to your environment.
@@ -117,6 +117,25 @@ $teams = array(
             "end" => "monday 12:00",
         ),
     ),
+    "fifthweekly.mycompany.com" => array(
+        "display_name" => "Fifth",
+        "email_report_to" => "fifth@mycompany.com",
+        "database" => "fifthweekly",
+        "weekly_hints" => array("jira", "github"),
+        "oncall" => array(
+            "provider" => "opsgenie",
+            "provider_options" => array(
+                // Single OpsGenie Team id
+                "opsgenie_team_id" => '43a29c5c-3dbf-4fa4-9c26-f4f71023e120',
+                // Multiple OpsGenie Team ids are set in the format array('4513b7ea-3b91-438f-b7e4-e3e54af9147c', '80564037-1984-4f38-b98e-8a1f662df552') etc...
+                // "opsgenie_team_id" => array('4513b7ea-3b91-438f-b7e4-e3e54af9147c', '80564037-1984-4f38-b98e-8a1f662df552'),
+            ),
+            "timezone" => "America/New_York",
+            "start" => "monday 12:00",
+            "end" => "monday 12:00",
+        ),
+    ),
+
 );
 
 /**
@@ -210,6 +229,13 @@ $oncall_providers = array(
             "password" => "password",
             // uncomment and define if you use apikeys
             // "apikey" => "XXXXXX",
+        ),
+    ),
+    "opsgenie" => array(
+        "display_name" => "OpsGenie",
+        "lib" => "providers/oncall/opsgenie.php",
+        "options" => array(
+            "apikey" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
         ),
     ),
 );
