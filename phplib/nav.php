@@ -49,8 +49,9 @@
                 <i class="icon-time icon-white"></i> Timezone<b class="caret"></b>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dTZ">
-                <li><a tabindex="-1" href="set_locale.php?l=UK">London, UK</a></li>
-                <li><a tabindex="-1" href="set_locale.php?l=ET">Brooklyn, NY</a></li>
+                <li><a tabindex="-1" href="set_locale.php?l=ET">Boston, MA</a></li>
+                <li><a tabindex="-1" href="set_locale.php?l=MT">Denver, CO</a></li>
+                <li><a tabindex="-1" href="set_locale.php?l=BE">Berlin, Germany</a></li>
                 <li><a tabindex="-1" href="set_locale.php?l=PT">San Francisco, CA</a></li>
             </ul>
         </li>

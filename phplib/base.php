@@ -34,7 +34,7 @@ $nagios_alert_tags = array("" => "Untagged", "issue" => "Action Taken: Service I
 $nagios_tag_categories = array("" => "Untagged", "action" => "Action Taken", "noaction" => "No Action Taken");
 $nagios_tag_category_map = array("issue" => "action", "issuetimeperiod" => "action", "viewissue" => "action", "incorrecttimeperiod" => "noaction",
     "downtimeexpired" => "noaction", "downtimenotset" => "noaction", "thresholdincorrect" => "noaction", "checkfaulty" => "noaction");
-$locales = array("UK" => "Europe/London", "ET" => "America/New_York", "PT" => "America/Los_Angeles");
+$locales = array("UK" => "Europe/London", "ET" => "America/New_York", "PT" => "America/Los_Angeles", "MT" => "America/Denver", "BE" => "Germany/Berlin");
 $sleep_states = array(-1 => "Unknown", 0 => "Awake", 1 => "Asleep");
 $sleep_state_icons = array(0 => "icon-eye-open", 1 => "icon-eye-close");
 $sleep_state_levels = array(-1 => "Unknown", 1 => "NREM Stage 1", 2 => "NREM Stage 2", 3 => "NREM Stage 3", 4 => "REM");
