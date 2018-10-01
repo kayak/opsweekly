@@ -108,7 +108,7 @@ function getOnCallNotifications($name, $global_config, $team_config, $start, $en
                     $output .= "\n";
                     // Add to the output all the trigger_summary_data info
                     if (!empty((array)$alert->data->details)) {
-                      foreach ($alert->details as $key => $key_data) {
+                      foreach ($alert->data->details as $key => $key_data) {
                         $output .= "{$key}: {$key_data}\n";
                       }
                     }
