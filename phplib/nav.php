@@ -31,9 +31,9 @@
             <a href="#" id="dLabel" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-calendar icon-white"></i> Set Date<b class="caret"></b></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                 <form id="setdate" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-                <div id="menu-datepicker" data-date="<?php echo date('m/d/y', $end_ts) ?>"><input id="picked-date" type="hidden" name="date" value=""></div>
+                <div id="menu-datepicker" data-date="<?php $x=date_default_timezone_get();date_default_timezone_set('UTC');echo date('m/d/y', $end_ts);date_default_timezone_set($x); ?>"><input id="picked-date" type="hidden" name="date" value=""></div>
                 <script>
-                    $('#menu-datepicker').datepicker({ format: "mm/dd/yy", todayHighlight: true, weekStart: 2 })
+                    $('#menu-datepicker').datepicker({ format: "mm/dd/yy", todayHighlight: true, weekStart: 1 })
                         .on('changeDate', function(e) {
                         $('input[name=date]').val(e.date.toUTCString());
                         $('#setdate').submit();

@@ -85,11 +85,11 @@ include_once('phplib/nav.php')
     <br />
     <h4>Choose week</h4>
     <form id="setdate" action="<?php echo $ROOT_URL; ?>/index.php" method="post">
-    <div id="datepicker" data-date="<?php echo date('m/d/y', $end_ts) ?>"><input id="picked-date" type="hidden" name="date" value=""></div>
+    <div id="datepicker" data-date="<?php $x=date_default_timezone_get();date_default_timezone_set('UTC');echo date('m/d/y', $end_ts);date_default_timezone_set($x); ?>"><input id="picked-date" type="hidden" name="date" value=""></div>
     <script>
         $('#datepicker').datepicker({ format: "mm/dd/yy", todayHighlight: true, weekStart: 1 })
             .on('changeDate', function(e) {
-                $('input[name=date]').val(e.date.toString());
+                $('input[name=date]').val(e.date.toUTCString());
                 $('#setdate').submit();
             });
     </script>
