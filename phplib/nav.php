@@ -33,9 +33,9 @@
                 <form id="setdate" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
                 <div id="menu-datepicker" data-date="<?php echo date('m/d/y', $end_ts) ?>"><input id="picked-date" type="hidden" name="date" value=""></div>
                 <script>
-                    $('#menu-datepicker').datepicker({ format: "mm/dd/yy", todayHighlight: true, weekStart: 1 })
+                    $('#menu-datepicker').datepicker({ format: "mm/dd/yy", todayHighlight: true, weekStart: 2 })
                         .on('changeDate', function(e) {
-                        $('input[name=date]').val(e.date.toString());
+                        $('input[name=date]').val(e.date.toUTCString());
                         $('#setdate').submit();
                     });
                 </script>

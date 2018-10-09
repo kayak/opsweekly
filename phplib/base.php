@@ -78,15 +78,17 @@ function getTimezoneSetting() {
 }
 
 function getWeekRange($date) {
+    $orig_tz = date_default_timezone_get();
+    date_default_timezone_set('UTC');
     $date_bits = explode('(', $date);
     $date = array_shift($date_bits);
     $ts = strtotime($date);
-    $target_start = (date('l', $ts) == "Monday") ? "monday" : "last monday";
-    $target_end = (date('l', $ts) == "Sunday") ? "sunday" : "next sunday";
+    $target_start = "last tuesday";
+    $target_end = "next tuesday";
     $start = strtotime($target_start, $ts);
     $return_start = date('U', $start);
     $return_end = date('U', strtotime($target_end, $start));
-
+    date_default_timezone_set($orig_tz);
     return array($return_start, $return_end);
 }
 

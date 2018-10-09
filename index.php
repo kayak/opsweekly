@@ -9,7 +9,12 @@ $start_end = getWeekRange($time_requested);
 $start_ts = $start_end[0];
 $end_ts = $start_end[1];
 
-$oncall_period = getOnCallWeekRange($time_requested); 
+$dt = new DateTime();
+$dt->setTimezone(new DateTimeZone('UTC'));
+$dt->setTimestamp($end_ts);
+$today = $dt->format("l jS F Y");
+
+$oncall_period = getOnCallWeekRange($time_requested);
 $oncall_start = $oncall_period[0];
 $oncall_end = $oncall_period[1];
 
@@ -25,7 +30,7 @@ include_once('phplib/nav.php')
 ?>
 
 <div class="container">
-<h1>Weekly updates week ending <?php echo date("l jS F Y", $end_ts ) ?></h1>
+<h1>Weekly updates week ending <?php echo $today ?></h1>
 <div class="row">
     <div class="span9">
     <?php
@@ -92,7 +97,7 @@ include_once('phplib/nav.php')
     <h4>Choose person</h3>
     <form id="setperson" action="<?php echo $ROOT_URL; ?>/user_updates.php" method="post">
     <select name="username" onchange="this.form.submit()"><option></option>
-        <?php 
+        <?php
             foreach($list_of_users as $user) {
                 echo "<option>{$user}</option>";
             }

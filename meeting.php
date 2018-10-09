@@ -16,6 +16,11 @@ $start_end = getWeekRange($time_requested);
 $start_ts = $start_end[0];
 $end_ts = $start_end[1];
 
+$dt = new DateTime();
+$dt->setTimezone(new DateTimeZone('UTC'));
+$dt->setTimestamp($end_ts);
+$today = $dt->format("l jS F Y");
+
 $oncall_period = getOnCallWeekRange($time_requested);
 $oncall_start = $oncall_period[0];
 $oncall_end = $oncall_period[1];
@@ -36,16 +41,16 @@ function setDateToLastWeek() {
 </script>
 
 <div class="container">
-<h1><?php echo getTeamName()?> Meeting For Week Ending <?php echo date("l jS F Y", $end_ts ) ?></h1>
+<h1><?php echo getTeamName()?> Meeting For Week Ending <?php echo $today ?></h1>
 <div class="row">
     <div class="span12">
-    <?php 
+    <?php
         if ($end_ts > time() ) {
         ?>
         <div class="alert alert-block">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <h4>Warning!</h4>
-            You're hosting a meeting for a week that hasn't ended yet. You probably want to host the meeting for last weeks data instead. <a href="javascript:setDateToLastWeek()">Click here to do that</a>. 
+            You're hosting a meeting for a week that hasn't ended yet. You probably want to host the meeting for last weeks data instead. <a href="javascript:setDateToLastWeek()">Click here to do that</a>.
         </div>
         <?php
         } else {
@@ -60,7 +65,7 @@ function setDateToLastWeek() {
         }
         ?>
         <div class="pull-right"><div class="btn-group"><a class="btn" role="button" data-toggle="modal" href="#permalink-modal"><i class="icon-bookmark"></i> Permalink</a></div></div>
-        <?php 
+        <?php
             if($results = checkForPreviousMeetingNotes( generateMeetingNotesID($start_ts, $end_ts)  )) {
                 $previous_timestamp = $results['timestamp'];
                 $previous_user = $results['user'];
@@ -84,7 +89,7 @@ function setDateToLastWeek() {
         <button class="btn btn-primary" type="submit">Save Meeting Notes</button>
         </form>
 
-        <?php 
+        <?php
         if (getTeamConfig('oncall')) {
         ?>
         <h2>On Call Report

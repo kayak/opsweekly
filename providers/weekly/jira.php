@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  *  A 'weekly' provider, or 'hints' is designed to prompt the
@@ -22,6 +22,7 @@ class JIRAHints {
     private $jira_api_url, $jira_url;
     private $events_from, $events_to;
     private $username;
+    private $method, $days;
 
     private $jira_context;
 
@@ -36,6 +37,8 @@ class JIRAHints {
         $this->events_to = $events_to;
         $this->jira_api_url = $config['jira_api_url'];
         $this->jira_url = $config['jira_url'];
+        $this->method = array_key_exists("method", $config) ? $config['method'] : "printJIRAForPeriod";
+        $this->days = array_key_exists("days", $config) ? $config['days'] : 7;
         $this->jira_context = stream_context_create(array(
             'http' => array(
                 'header'  => "Authorization: Basic " . base64_encode("{$config['username']}:{$config['password']}")
@@ -44,7 +47,14 @@ class JIRAHints {
     }
 
     public function printHints() {
-        return $this->printJIRAForPeriod();
+      switch ($this->method) {
+        case "printJIRAForPeriod":
+          return $this->printJIRAForPeriod();
+          break;
+        case "printJiraForDays":
+          return $this->printJiraForDays($this->days);
+          break;
+      }
     }
 
     public function getJIRALastPeriod($days) {
@@ -64,8 +74,8 @@ class JIRAHints {
         return $decoded;
     }
 
-    public function printJIRALast7Days() {
-        $tickets = $this->getJIRALastPeriod(7);
+    public function printJIRAForDays($days) {
+        $tickets = $this->getJIRALastPeriod($days);
         if ($tickets->total > 0) {
             $html = "<ul>";
             foreach ($tickets->issues as $issue) {

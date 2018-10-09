@@ -5,9 +5,15 @@ $time_requested = getOrSetRequestedDate();
 
 $my_username = getUsername();
 
+
 $start_end = getWeekRange($time_requested);
 $start_ts = $start_end[0];
 $end_ts = $start_end[1];
+
+$dt = new DateTime();
+$dt->setTimezone(new DateTimeZone('UTC'));
+$dt->setTimestamp($end_ts);
+$today = $dt->format("l jS F Y");
 
 $oncall_period = getOnCallWeekRange($time_requested);
 $oncall_start = $oncall_period[0];
@@ -21,10 +27,10 @@ include_once('phplib/nav.php')
 ?>
 
 <div class="container">
-<h1>Update for week ending <?php echo date("l jS F Y", $end_ts ) ?></h2>
+<h1>Update for week ending <?php echo $today; ?></h2>
 <div class="row">
     <div class="span12">
-        <?php 
+        <?php
         if (getTeamConfig('oncall')) {
         ?>
         <h2>On call report</h2>
@@ -33,8 +39,8 @@ include_once('phplib/nav.php')
         }
         ?>
         <div id="on-call-question">
-        <?php 
-        // See if a report was already submitted for this week. Doesn't matter, just a heads up. 
+        <?php
+        // See if a report was already submitted for this week. Doesn't matter, just a heads up.
         if ($oncall_user = guessPersonOnCall($oncall_start, $oncall_end)) {
             if ($oncall_user == $my_username) {
                 echo "<p>You have already submitted a report this week, but you can update or add to it by clicking the button below</p>";
@@ -45,7 +51,7 @@ include_once('phplib/nav.php')
             echo "<p>Were you on call this week? Click button to load notification report</p>";
         }
         ?>
-        <button type="button" class="btn btn-danger" data-loading-text="Generating On Call Summary..." 
+        <button type="button" class="btn btn-danger" data-loading-text="Generating On Call Summary..."
             onclick="$(this).button('loading'); $('.notifications').load('generate_oncall_survey.php?date=<?php echo urlencode($time_requested) ?>', function() { $('#on-call-question').fadeOut('fast') });">I was on call</button>
         </div>
         <div class="notifications" id="notifications"></div>
@@ -93,7 +99,7 @@ include_once('phplib/nav.php')
             ?>
             </div>
         </div>
-  
+
     </div>
 </div>
 </form>
