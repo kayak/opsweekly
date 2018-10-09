@@ -30,7 +30,7 @@ include_once('phplib/nav.php')
 ?>
 
 <div class="container">
-<h1>Weekly updates week ending <?php echo $today ?></h1>
+<h1>Weekly updates week ending <?php echo getUTCWeekEnd($end_ts) ?></h1>
 <div class="row">
     <div class="span9">
     <?php

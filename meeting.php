@@ -41,7 +41,7 @@ function setDateToLastWeek() {
 </script>
 
 <div class="container">
-<h1><?php echo getTeamName()?> Meeting For Week Ending <?php echo $today ?></h1>
+<h1><?php echo getTeamName()?> Meeting For Week Ending <?php echo getUTCWeekEnd($end_ts) ?></h1>
 <div class="row">
     <div class="span12">
     <?php

@@ -10,11 +10,6 @@ $start_end = getWeekRange($time_requested);
 $start_ts = $start_end[0];
 $end_ts = $start_end[1];
 
-$dt = new DateTime();
-$dt->setTimezone(new DateTimeZone('UTC'));
-$dt->setTimestamp($end_ts);
-$today = $dt->format("l jS F Y");
-
 $oncall_period = getOnCallWeekRange($time_requested);
 $oncall_start = $oncall_period[0];
 $oncall_end = $oncall_period[1];
@@ -27,7 +22,7 @@ include_once('phplib/nav.php')
 ?>
 
 <div class="container">
-<h1>Update for week ending <?php echo $today; ?></h2>
+<h1>Update for week ending <?php echo getUTCWeekEnd($end_ts) ?></h2>
 <div class="row">
     <div class="span12">
         <?php

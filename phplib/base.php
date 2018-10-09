@@ -78,18 +78,27 @@ function getTimezoneSetting() {
 }
 
 function getWeekRange($date) {
+    global $team_data;
     $orig_tz = date_default_timezone_get();
     date_default_timezone_set('UTC');
     $date_bits = explode('(', $date);
     $date = array_shift($date_bits);
     $ts = strtotime($date);
-    $target_start = "last tuesday";
-    $target_end = "next tuesday";
+    $target_start = array_key_exists("week_start", $team_data) ? $team_data['week_start'] : "last monday";
+    $target_end = array_key_exists("week_end", $team_data) ? $team_data['week_end'] : "next monday";
     $start = strtotime($target_start, $ts);
     $return_start = date('U', $start);
     $return_end = date('U', strtotime($target_end, $start));
     date_default_timezone_set($orig_tz);
     return array($return_start, $return_end);
+}
+
+function getUTCWeekEnd($end) {
+    $dt = new DateTime();
+    $dt->setTimezone(new DateTimeZone('UTC'));
+    $dt->setTimestamp($end);
+    $today = $dt->format("l jS F Y");
+    return $today;
 }
 
 function getOnCallWeekRange($date) {
