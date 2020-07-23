@@ -651,23 +651,29 @@ function getWeeklyHintProvider($provider) {
     return (array_key_exists($provider, $weekly_providers)) ? $weekly_providers[$provider] : false;
 }
 
-function sendEmailReport($from_username, $report, $range_start, $range_end) {
+function sendEmailReport($from_username, $report, $range_start, $range_end, $is_markdown = false) {
     global $email_from_domain;
 
     if(!$email_report_to = getTeamConfig('email_report_to')) {
         return false;
     }
 
-    // Remove any bare linefeeds, Evernote loveeees to insert them.
-    $report = str_replace('\r\n', '', $report);
+    if (!$is_markdown) {
+        // Remove any bare linefeeds, Evernote loveeees to insert them. 
+        $report = str_replace('\r\n', '', $report);
+    }
 
     $subject = "Weekly Update";
 
     $message = "<html><body>";
     $message .= "<h3>Weekly report for week ending ". date("l jS F Y", $range_end ) . "</h3>";
-    $message .= "<p>";
-    $message .= stripslashes($report);
-    $message .= "</p>";
+    if ($is_markdown) {
+        $message .= $report;
+    } else {
+        $message .= "<p>";
+        $message .= stripslashes($report);
+        $message .= "</p>";
+    }
     $message .= "</body></html>";
 
     if (sendEmail($email_report_to, strip_tags("{$from_username}@{$email_from_domain}"), $subject, $message)) {

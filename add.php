@@ -71,14 +71,31 @@ include_once('phplib/nav.php')
 
                 ?>
                 <form action="add_generic_weekly.php" method="POST">
+                <input id="use_markdown" name="use_markdown" type="hidden" value="false"><button type="button" class="btn" style="float:right;" id="markdown_btn">Use Markdown</button>
                 <textarea class="textarea span7" name="weeklyupdate" placeholder="Enter Update" style="height: 500px"><?php echo $previous_report  ?></textarea>
                 <script>
-                    $('.textarea').wysihtml5({"image": false, "color": false});
-                    var wysihtml5Editor = $(".textarea").data("wysihtml5").editor;
-                    wysihtml5Editor.observe("focus", function() {
-                        if ($('a[data-dismiss="alert"]').html() !== undefined) {
-                            $('a[data-dismiss="alert"]').click();
-                        }
+                    function loadEditor() {
+                        $('.textarea').wysihtml5({"image": false, "color": false});
+                        var wysihtml5Editor = $(".textarea").data("wysihtml5").editor;
+                        wysihtml5Editor.observe("focus", function() {
+                                if ($('a[data-dismiss="alert"]').html() !== undefined) {
+                                    $('a[data-dismiss="alert"]').click();
+                                }
+                            });
+                    }
+                    loadEditor();
+
+                    $('#markdown_btn').on('click', function() {
+                            $('#use_markdown').val(true);
+                            var text = $('.textarea').val();
+                            
+                            $("iframe.wysihtml5-sandbox, input[name='_wysihtml5_mode']").remove();
+                            $(".wysihtml5-toolbar").remove();
+                            $("body").removeClass("wysihtml5-supported");
+                            
+                            $('.textarea').replaceWith($('<textarea class="textarea span7" name="weeklyupdate" placeholder="Enter Update" style="height:500px;"></textarea>'));
+                            $('.textarea').val(text);
+                            $(this).hide();
                     });
                 </script>
                 <input type="hidden" name="range_start" value="<?php echo $start_ts ?>">
