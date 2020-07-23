@@ -59,7 +59,7 @@ class JIRAHints {
 
     public function getJIRALastPeriod($days) {
         $user = strtolower($this->username);
-        $search = rawurlencode("assignee = {$user} AND updated >= -{$days}days AND Status != New ORDER BY updated DESC, key DESC");
+        $search = rawurlencode("assignee = {$user} AND Status changed DURING (-{$days}days,NOW()) AND Status != New ORDER BY updated DESC, key DESC");
         $json = file_get_contents("{$this->jira_api_url}/search?jql={$search}", false, $this->jira_context);
         $decoded = json_decode($json);
         return $decoded;
@@ -67,7 +67,7 @@ class JIRAHints {
 
     public function getJIRAForPeriod($start, $end) {
         $user = strtolower($this->username);
-        $search = "assignee = {$user} AND updated >= {$start} AND updated <= {$end} AND Status != New ORDER BY updated DESC, key DESC";
+        $search = "assignee = {$user} AND Status changed AFTER {$start} AND Status changed BEFORE {$end} AND Status != New ORDER BY updated DESC, key DESC";
         $search = rawurlencode($search);
         $json = file_get_contents("{$this->jira_api_url}/search?jql={$search}", false, $this->jira_context);
         $decoded = json_decode($json);
