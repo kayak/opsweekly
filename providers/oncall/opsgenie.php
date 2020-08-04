@@ -104,21 +104,20 @@ function getOnCallNotifications($name, $global_config, $team_config, $start, $en
                     if (!$alert = json_decode($alert_json)) {
                       return "Could not retrieve alert details from OpsGenie. Check logs.";
                     }
-                    if (preg_match('/LogicMonitor/i',$service) {
-                        if (!empty($alert->data->entity)){
-                            $output = $alert->data->entity;
+                    if (preg_match('/LogicMonitor/i',$service)) {
+                        if (!empty($alert->data->owner)){
+                            $output = sprintf("%s: %s\n", "Owner", $alert->data->entity);
                         } else {
-                            $output = 'OpsGenie';
+                            $output = 'Owner: n/a\n';
                         }
-                        $output .= "\n";
                         // Add to the output all the trigger_summary_data info
                     
-                        $details_to_find = array('datasource', 'datapoint', 'threshold')
+                        $details_to_find = array('DataSource', 'DataPoint', 'Threshold');
                         if (!empty((array)$alert->data->details)) {
                             $details = (array)$alert->data->details;
                             foreach($details_to_find as $detail_to_find){
-                                if (array_key_exists($detail_to_find, $details){
-                                    $output .= sprintf("%s: %s\n", ucfirst($detail_to_find), $details[$detail_to_find]);
+                                if (array_key_exists($detail_to_find, $details)){
+                                    $output .= sprintf("%s: %s\n", $detail_to_find, $details[$detail_to_find]);
                                 }
                             }
                         }
@@ -135,7 +134,7 @@ function getOnCallNotifications($name, $global_config, $team_config, $start, $en
                     }
 
                     // try to determine the hostname
-                    if (isset($alert->data->entity)) {
+                    if (!empty($alert->data->entity)) {
                         $hostname = $alert->data->entity;
                     } else {
                         // fallback is to just say it was OpsGenie that sent it in
