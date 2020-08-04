@@ -104,13 +104,34 @@ function getOnCallNotifications($name, $global_config, $team_config, $start, $en
                     if (!$alert = json_decode($alert_json)) {
                       return "Could not retrieve alert details from OpsGenie. Check logs.";
                     }
-                    $output = $alert->data->message;
-                    $output .= "\n";
-                    // Add to the output all the trigger_summary_data info
-                    if (!empty((array)$alert->data->details)) {
-                      foreach ($alert->data->details as $key => $key_data) {
-                        $output .= "{$key}: {$key_data}\n";
-                      }
+                    if (preg_match('/LogicMonitor/i',$service) {
+                        if (!empty($alert->data->entity)){
+                            $output = $alert->data->entity;
+                        } else {
+                            $output = 'OpsGenie';
+                        }
+                        $output .= "\n";
+                        // Add to the output all the trigger_summary_data info
+                    
+                        $details_to_find = array('datasource', 'datapoint', 'threshold')
+                        if (!empty((array)$alert->data->details)) {
+                            $details = (array)$alert->data->details;
+                            foreach($details_to_find as $detail_to_find){
+                                if (array_key_exists($detail_to_find, $details){
+                                    $output .= sprintf("%s: %s\n", ucfirst($detail_to_find), $details[$detail_to_find]);
+                                }
+                            }
+                        }
+                        /*if (!empty((array)$alert->data->details)) {
+                          foreach ($alert->data->details as $key => $key_data) {
+                            $output .= "{$key}: {$key_data}\n";
+                          }
+                        }*/
+                    } else {
+                        // We're not from logicmonitor
+                        $output = $alert->data->message;
+                        $output .= "\n";
+                        $output .= $alert->data->description;
                     }
 
                     // try to determine the hostname
