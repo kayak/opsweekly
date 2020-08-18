@@ -97,6 +97,7 @@ function setDateToLastWeek() {
         if($results = getOnCallReportForWeek($oncall_start, $oncall_end)) {
             echo "<small> for week " . date("l jS F Y", $oncall_start) . " - " . date("l jS F Y", $oncall_end);
             echo " compiled by " . guessPersonOnCall($oncall_start, $oncall_end) . "</small></h2>";
+            echo "<small style='font-size: 0.8em'><a href='#' onclick='$(\"#oncall-table\").fadeToggle(\"fast\"); $(\"#oncall-stats\").fadeToggle(\"fast\");'>hide/show</a></small>";
         ?>
         <table class="table table-striped table-bordered table-hover" id="oncall-table" style='font-size: 90%'>
         <thead>
