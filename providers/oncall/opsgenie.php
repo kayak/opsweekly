@@ -106,7 +106,7 @@ function getOnCallNotifications($name, $global_config, $team_config, $start, $en
                     }
                     if (preg_match('/LogicMonitor/i',$service)) {
                         if (!empty($alert->data->owner)){
-                            $output = sprintf("%s: %s\n", "Owner", $alert->data->entity);
+                            $output = sprintf("%s: %s\n", "Owner", $alert->data->owner);
                         } else {
                             $output = 'Owner: n/a\n';
                         }
