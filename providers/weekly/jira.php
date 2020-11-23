@@ -40,7 +40,7 @@ class JIRAHints {
         $this->method = array_key_exists("method", $config) ? $config['method'] : "printJIRAForPeriod";
         $this->days = array_key_exists("days", $config) ? $config['days'] : 7;
 
-        $this->jira_context = $this->_create_context_from_config($config));
+        $this->jira_context = $this->_create_context_from_config($config);
     }
 
     public function _create_context_from_config($config) {
@@ -49,18 +49,18 @@ class JIRAHints {
         $authorization = '';
         /// Prefer token auth
         if (!empty($config['token'])) {
-            $authorization = sprintf('Bearer %s', $config['token']); 
+            $authorization = sprintf('Basic %s', base64_encode("{$config['username']}:{$config['token']}")); 
         } elseif (!empty($config['username']) && !empty($config['password'])) {
-            $authorization = sprintf('Basic %s'), base64_encode("{$config['username']}:{$config['password']}")
+            $authorization = sprintf('Basic %s', base64_encode("{$config['username']}:{$config['password']}"));
         } else {
             die('Failed to create Jira context. Ensure you have setup config properly');
         }
 
         return stream_context_create(array(
             'http' => array(
-                'header' => sprintf("Authorization: %s", $authorization)
+                'header' => sprintf("Authorization: %s\r\nAccept: */*", $authorization)
             )
-        )
+        ));
     }
 
 
