@@ -39,12 +39,30 @@ class JIRAHints {
         $this->jira_url = $config['jira_url'];
         $this->method = array_key_exists("method", $config) ? $config['method'] : "printJIRAForPeriod";
         $this->days = array_key_exists("days", $config) ? $config['days'] : 7;
-        $this->jira_context = stream_context_create(array(
-            'http' => array(
-                'header'  => "Authorization: Basic " . base64_encode("{$config['username']}:{$config['password']}")
-            )
-        ));
+
+        $this->jira_context = $this->_create_context_from_config($config));
     }
+
+    public function _create_context_from_config($config) {
+        // Should support both basic and digest/bearer authentication.
+        // Return stream_context_create()
+        $authorization = '';
+        /// Prefer token auth
+        if (!empty($config['token'])) {
+            $authorization = sprintf('Bearer %s', $config['token']); 
+        } elseif (!empty($config['username']) && !empty($config['password'])) {
+            $authorization = sprintf('Basic %s'), base64_encode("{$config['username']}:{$config['password']}")
+        } else {
+            die('Failed to create Jira context. Ensure you have setup config properly');
+        }
+
+        return stream_context_create(array(
+            'http' => array(
+                'header' => sprintf("Authorization: %s", $authorization)
+            )
+        )
+    }
+
 
     public function printHints() {
       switch ($this->method) {
