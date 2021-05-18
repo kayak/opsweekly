@@ -61,7 +61,7 @@ include_once('phplib/nav.php')
                 <small><a href="#" onClick="$('#oncall-table').fadeToggle('fast')">hide/show</a></small></h5>
     <?php
                 echo printOnCallTableHeader();
-                foreach ($results as $n) {
+                foreach (array_reverse($results) as $n) {
                     echo formatOnCallRowForPrint($n);
                 }
                 echo printOnCallTableFooter();
