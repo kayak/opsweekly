@@ -108,7 +108,7 @@ function setDateToLastWeek() {
         <tbody>
 
         <?php
-            foreach (reverse_array($results) as $n) {
+            foreach (array_reverse($results) as $n) {
                 echo formatOnCallRowForPrint($n);
             }
         echo "</tbody></table>";
